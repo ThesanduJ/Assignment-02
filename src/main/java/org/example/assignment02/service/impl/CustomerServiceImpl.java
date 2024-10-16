@@ -6,6 +6,7 @@ import org.example.assignment02.dao.CustomerDao;
 import org.example.assignment02.dto.CustomerStatus;
 import org.example.assignment02.dto.impl.CustomerDTO;
 import org.example.assignment02.entity.impl.CustomerEntity;
+import org.example.assignment02.exception.CustomerNotFoundException;
 import org.example.assignment02.exception.DataPersistException;
 import org.example.assignment02.service.CustomerService;
 import org.example.assignment02.util.Mapping;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 @Transactional
 public class CustomerServiceImpl implements CustomerService {
@@ -44,12 +47,23 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void deleteCustomer(int phoneNumber) {
-
+    public void deleteCustomer(String phoneNumber) {
+        Optional<CustomerEntity> findCustomer=customerDao.findById(phoneNumber);
+        if (!findCustomer.isPresent()) {
+            throw new CustomerNotFoundException("Customer not found");
+        }else {
+            customerDao.deleteById(phoneNumber);
+        }
     }
 
     @Override
-    public void updateCustomer(int phoneNumber, CustomerDTO customerDTO) {
-
+    public void updateCustomer(String phoneNumber, CustomerDTO customerDTO) {
+        Optional<CustomerEntity> findCustomer=customerDao.findById(phoneNumber);
+        if (!findCustomer.isPresent()) {
+            throw new CustomerNotFoundException("Customer not found");
+        }else {
+            findCustomer.get().setName(customerDTO.getName());
+            findCustomer.get().setAddress(customerDTO.getAddress());
+        }
     }
 }

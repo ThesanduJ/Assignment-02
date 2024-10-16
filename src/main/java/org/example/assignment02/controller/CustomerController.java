@@ -3,6 +3,7 @@ package org.example.assignment02.controller;
 import org.example.assignment02.customStatusCode.SelectedCustomerItemAndOrderErrorStatus;
 import org.example.assignment02.dto.CustomerStatus;
 import org.example.assignment02.dto.impl.CustomerDTO;
+import org.example.assignment02.exception.CustomerNotFoundException;
 import org.example.assignment02.exception.DataPersistException;
 import org.example.assignment02.service.CustomerService;
 import org.example.assignment02.util.Regex;
@@ -44,6 +45,38 @@ public class CustomerController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<CustomerDTO> getAllCustomers(){
         return customerService.getAllCustomers();
+    }
+    @DeleteMapping(value = "/{phoneNumber}")
+    public ResponseEntity<Void> deleteCustomer(@PathVariable("phoneNumber") String phoneNumber){
+        try{
+            if (!Regex.checkPhoneNumber(phoneNumber)){
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            customerService.deleteCustomer(phoneNumber);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch (CustomerNotFoundException e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @PutMapping(value = "/{phoneNumber}")
+    public ResponseEntity<Void> updateCustomer(@PathVariable("phoneNumber") String phoneNumber,@RequestBody CustomerDTO customerDTO){
+        try {
+            if (!Regex.checkPhoneNumber(phoneNumber)) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            customerService.updateCustomer(phoneNumber, customerDTO);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch (CustomerNotFoundException e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }
