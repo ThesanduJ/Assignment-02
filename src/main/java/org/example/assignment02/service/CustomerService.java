@@ -9,6 +9,6 @@ public interface CustomerService {
     void saveCustomers(CustomerDTO customerDTO);
     List<CustomerDTO> getAllCustomers();
     CustomerStatus getCustomer(String phoneNumber);
-    void deleteCustomer(int phoneNumber);
-    void updateCustomer(int phoneNumber, CustomerDTO customerDTO);
+    void deleteCustomer(String phoneNumber);
+    void updateCustomer(String phoneNumber, CustomerDTO customerDTO);
 }
