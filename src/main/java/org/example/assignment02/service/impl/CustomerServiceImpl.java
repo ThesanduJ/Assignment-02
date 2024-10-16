@@ -1,6 +1,7 @@
 package org.example.assignment02.service.impl;
 
 import jakarta.transaction.Transactional;
+import org.example.assignment02.customStatusCode.SelectedCustomerItemAndOrderErrorStatus;
 import org.example.assignment02.dao.CustomerDao;
 import org.example.assignment02.dto.CustomerStatus;
 import org.example.assignment02.dto.impl.CustomerDTO;
@@ -29,12 +30,17 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<CustomerDTO> getAllCustomers() {
-        return List.of();
+        return customerMapping.asCustomerDTOList(customerDao.findAll());
     }
 
     @Override
-    public CustomerStatus getCustomer(int phoneNumber) {
-        return null;
+    public CustomerStatus getCustomer(String phoneNumber) {
+        if (customerDao.existsById(phoneNumber)) {
+            var selectedCustomer=customerDao.getReferenceById(phoneNumber);
+            return customerMapping.toCustomerDTO(selectedCustomer);
+        }else {
+            return new SelectedCustomerItemAndOrderErrorStatus(2,"customer not found");
+        }
     }
 
     @Override
