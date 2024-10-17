@@ -1,5 +1,6 @@
 package org.example.assignment02.service.impl;
 
+import org.example.assignment02.customStatusCode.SelectedCustomerItemAndOrderErrorStatus;
 import org.example.assignment02.dao.ItemDao;
 import org.example.assignment02.dao.OrdersDao;
 import org.example.assignment02.dto.OrderStatus;
@@ -42,7 +43,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderStatus getOrders(String orderId) {
-        return null;
+        if (orderDao.existsById(orderId)) {
+            var selectedOrder=orderDao.getReferenceById(orderId);
+            return orderMapping.toOrderDTO(selectedOrder);
+        }else {
+            return new SelectedCustomerItemAndOrderErrorStatus(2,"Selected order is not found");
+        }
     }
 
     @Override
