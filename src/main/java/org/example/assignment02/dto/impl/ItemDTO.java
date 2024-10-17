@@ -13,4 +13,5 @@ public class ItemDTO implements ItemStatus {
     private String itemName;
     private String itemDescription;
     private String price;
+    private String quantity;
 }

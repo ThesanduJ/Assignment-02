@@ -22,4 +22,6 @@ public class ItemEntity implements SuperEntity {
     private String itemDescription;
     @Column(nullable = false)
     private String price;
+    @Column(nullable = false)
+    private String quantity;
 }
