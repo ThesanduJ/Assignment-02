@@ -7,6 +7,7 @@ import org.example.assignment02.dto.OrderStatus;
 import org.example.assignment02.dto.impl.OrderDTO;
 import org.example.assignment02.entity.impl.OrderEntity;
 import org.example.assignment02.exception.DataPersistException;
+import org.example.assignment02.exception.OrderNotFoundException;
 import org.example.assignment02.service.OrderService;
 import org.example.assignment02.util.AppUtil;
 import org.example.assignment02.util.Mapping;
@@ -56,7 +57,7 @@ public class OrderServiceImpl implements OrderService {
     public void deleteOrders(String orderId) {
         Optional<OrderEntity> findOrder = orderDao.findById(orderId);
         if (!findOrder.isPresent()) {
-            throw new DataPersistException("Order not deleted");
+            throw new OrderNotFoundException("Order not deleted");
         }else {
             orderDao.deleteById(orderId);
         }
@@ -64,6 +65,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void updateOrders(String orderId, OrderDTO orderDTO) {
-
+        Optional<OrderEntity> findOrder = orderDao.findById(orderId);
+        if (!findOrder.isPresent()) {
+            throw new OrderNotFoundException("Order not found");
+        }else {
+            findOrder.get().setTotalPrice(orderDTO.getTotalPrice());
+            findOrder.get().setCustomerNumber(orderDTO.getCustomerNumber());
+        }
     }
 }
