@@ -8,9 +8,4 @@ public class Regex {
         Pattern pattern = Pattern.compile(regexForNumber);
         return pattern.matcher(phoneNumber).matches();
     }
-    public static boolean checkItemCode(String itemId) {
-        String regexForItemId="^[A-Za-z0-9]{6,10}$\n";
-        Pattern pattern = Pattern.compile(regexForItemId);
-        return pattern.matcher(itemId).matches();
-    }
 }
