@@ -38,7 +38,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDTO> getAllOrders() {
-        return List.of();
+        return orderMapping.asOrderDTOList(orderDao.findAll());
     }
 
     @Override
