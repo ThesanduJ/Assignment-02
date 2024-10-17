@@ -6,6 +6,7 @@ import org.example.assignment02.dto.ItemStatus;
 import org.example.assignment02.dto.impl.ItemDTO;
 import org.example.assignment02.entity.impl.ItemEntity;
 import org.example.assignment02.exception.DataPersistException;
+import org.example.assignment02.exception.ItemNotFoundException;
 import org.example.assignment02.service.ItemService;
 import org.example.assignment02.util.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,7 @@ public class ItemServiceImpl implements ItemService {
     public void deleteItem(String itemId) {
         Optional<ItemEntity> findItem=itemDao.findById(itemId);
         if (!findItem.isPresent()) {
-            throw new DataPersistException("Item not found");
+            throw new ItemNotFoundException("Item not found");
         }else {
             itemDao.deleteById(itemId);
         }
@@ -60,7 +61,7 @@ public class ItemServiceImpl implements ItemService {
     public void updateItem(String itemId, ItemDTO itemDTO) {
         Optional<ItemEntity> findItem=itemDao.findById(itemId);
         if (!findItem.isPresent()) {
-            throw new DataPersistException("Item not found");
+            throw new ItemNotFoundException("Item not found");
         }else {
             findItem.get().setItemName(itemDTO.getItemName());
             findItem.get().setPrice(itemDTO.getPrice());
