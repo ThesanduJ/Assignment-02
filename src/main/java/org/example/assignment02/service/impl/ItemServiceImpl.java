@@ -1,5 +1,6 @@
 package org.example.assignment02.service.impl;
 
+import org.example.assignment02.customStatusCode.SelectedCustomerItemAndOrderErrorStatus;
 import org.example.assignment02.dao.ItemDao;
 import org.example.assignment02.dto.ItemStatus;
 import org.example.assignment02.dto.impl.ItemDTO;
@@ -36,7 +37,12 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemStatus getItem(String itemId) {
-        return null;
+        if (itemDao.existsById(itemId)) {
+            var selectedItem=itemDao.getReferenceById(itemId);
+            return itemMapping.toItemDTO(selectedItem);
+        }else {
+            return new SelectedCustomerItemAndOrderErrorStatus(2,"selected item not found");
+        }
     }
 
     @Override
