@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -53,7 +54,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void deleteOrders(String orderId) {
-
+        Optional<OrderEntity> findOrder = orderDao.findById(orderId);
+        if (!findOrder.isPresent()) {
+            throw new DataPersistException("Order not deleted");
+        }else {
+            orderDao.deleteById(orderId);
+        }
     }
 
     @Override
