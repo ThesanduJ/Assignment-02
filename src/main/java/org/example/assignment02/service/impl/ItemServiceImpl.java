@@ -57,7 +57,14 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public void updateItem(String itemId, ItemDTO item) {
-
+    public void updateItem(String itemId, ItemDTO itemDTO) {
+        Optional<ItemEntity> findItem=itemDao.findById(itemId);
+        if (!findItem.isPresent()) {
+            throw new DataPersistException("Item not found");
+        }else {
+            findItem.get().setItemName(itemDTO.getItemName());
+            findItem.get().setPrice(itemDTO.getPrice());
+            findItem.get().setItemDescription(itemDTO.getItemDescription());
+        }
     }
 }
