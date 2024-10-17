@@ -4,6 +4,7 @@ import org.example.assignment02.customStatusCode.SelectedCustomerItemAndOrderErr
 import org.example.assignment02.dto.ItemStatus;
 import org.example.assignment02.dto.impl.ItemDTO;
 import org.example.assignment02.exception.DataPersistException;
+import org.example.assignment02.exception.ItemNotFoundException;
 import org.example.assignment02.service.ItemService;
 import org.example.assignment02.util.Regex;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,5 +42,18 @@ public class ItemController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ItemDTO> getAllItems() {
         return itemService.getAllItems();
+    }
+    @DeleteMapping(value = "/{itemId}")
+    public ResponseEntity<Void> deleteItem(@PathVariable("itemId") String itemId) {
+        try {
+            itemService.deleteItem(itemId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch (ItemNotFoundException e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

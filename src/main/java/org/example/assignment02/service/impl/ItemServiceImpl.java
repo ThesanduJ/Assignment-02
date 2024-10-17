@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -47,7 +48,12 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void deleteItem(String itemId) {
-
+        Optional<ItemEntity> findItem=itemDao.findById(itemId);
+        if (!findItem.isPresent()) {
+            throw new DataPersistException("Item not found");
+        }else {
+            itemDao.deleteById(itemId);
+        }
     }
 
     @Override
