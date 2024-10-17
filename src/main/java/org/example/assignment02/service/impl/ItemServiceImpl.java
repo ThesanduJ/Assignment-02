@@ -32,7 +32,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDTO> getAllItems() {
-        return List.of();
+        return itemMapping.asItemDTOList(itemDao.findAll());
     }
 
     @Override
